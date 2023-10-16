@@ -8,6 +8,7 @@ import InputText from '@/components/InputText';
 import InputDate from '@/components/InputDate';
 import InputFile from '@/components/InputFile';
 import Button from '@/components/Button';
+import { createEvent } from '@/lib/events';
 
 
 function EventNew() {
@@ -19,6 +20,12 @@ function EventNew() {
 
   async function handleOnSubmit(e: React.SyntheticEvent) {
     e.preventDefault();
+
+    const results = await createEvent({
+      name: 'Test 1',
+      location: 'Philadelphia, PA',
+      date: new Date().toISOString()
+    })
   }
 
   return (
