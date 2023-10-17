@@ -1,5 +1,5 @@
 import { useState } from 'react';
-
+import { useLocation } from 'wouter';
 import Layout from '@/components/Layout';
 import Container from '@/components/Container';
 import FormRow from '@/components/FormRow';
@@ -11,21 +11,57 @@ import Button from '@/components/Button';
 import { createEvent } from '@/lib/events';
 
 
+interface LiveBeatImage {
+  height: number;
+  file:File;
+  width: number;
+}
+
 function EventNew() {
+  const [, navigate] = useLocation();
   const [error] = useState<string>();
+  const[image, setImage] = useState<LiveBeatImage>();
+
+  console.log('Image', image);
 
   /**
    * handleOnSubmit
    */
 
+function handleOnChange(event: React.FormEvent<HTMLInputElement>) {
+  const target = event.target as HTMLInputElement & {
+    files: FileList;
+  }
+const img = new Image();
+img.onload = function() {
+setImage({
+  height: img.height, 
+  file: target.files[0],
+  width: img.width
+})
+}
+
+img.src = URL.createObjectURL(target.files[0]);
+
+}
+
   async function handleOnSubmit(e: React.SyntheticEvent) {
     e.preventDefault();
 
+    const target = e.target as typeof e.target & {
+      name:  {value:string}
+      location: {value:string}
+      date:{value:string}
+    }
+
     const results = await createEvent({
-      name: 'Test 1',
-      location: 'Philadelphia, PA',
-      date: new Date().toISOString()
-    })
+      name: target.name.value,
+      location: target.location.value,
+      date: new Date(target.date.value).toISOString()
+    });
+
+    navigate(`/event/${results.events.$id}`);
+
   }
 
   return (
@@ -65,7 +101,7 @@ function EventNew() {
 
           <FormRow className="mb-6">
             <FormLabel htmlFor="image">File</FormLabel>
-            <InputFile id="image" name="image" />
+            <InputFile id="image" name="image" onChange={handleOnChange} />
             <p className="text-sm mt-2">Accepted File Types: jpg, png</p>
           </FormRow>
 
