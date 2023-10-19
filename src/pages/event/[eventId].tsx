@@ -4,36 +4,41 @@ import Container from '@/components/Container';
 // import Button from '@/components/Button';
 
 import { getEventById } from '@/lib/events';
+import { getPreviewImageById } from '@/lib/storage';
 import { LiveBeatEvent } from '@/types/events';
 
 function Event( {params}: {params: { eventId:string }}) {
-  // const image = {
-  //   url: events[0].imageUrl,
-  //   alt: ''
-  // };
+  const [event, setEvent] = useState<LiveBeatEvent | undefined>();
 
-const [event, setEvent] = useState<LiveBeatEvent | undefined>();
+  const imageUrl = event?.imageFileId && getPreviewImageById(event.imageFileId)
 
-  useEffect( ()=> {
-    (async function run() {
-      const { events }  = await getEventById(params.eventId)
-      setEvent(events);   
+  const image = {
+    url: imageUrl,
+    alt: '',
+    height: event?.imageHeight,
+    width: event?.imageWidth,
+  };
+
+  useEffect(() => {
+    (async function run() {      
+        const { event } = await getEventById(params.eventId);
+        setEvent(event);       
     })();
-    }, [params.eventId])
+  }, [params.eventId]);
 
   return (
     <Layout>
       <Container className="grid gap-12 grid-cols-1 md:grid-cols-2">
         <div>
-          {/* {image?.url && (
+        {image?.url && (
             <img
               className="block rounded"
-              width={800}
-              height={450}
-              src={image.url}
+              width={image.width}
+              height={image.height}
+              src={String(image.url)}
               alt={image.alt}
             />
-          )} */}
+           )} 
         </div>
 
         <div>

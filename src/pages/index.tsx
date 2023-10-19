@@ -6,6 +6,7 @@ import { LiveBeatEvent } from '@/types/events';
 import Layout from '@/components/Layout';
 import Container from '@/components/Container';
 import EventCard from '@/components/EventCard';
+import { getPreviewImageById } from '@/lib/storage';
 
 
 function Home() {
@@ -36,17 +37,18 @@ function Home() {
           <Container>
             <div className="grid gap-12 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
               {events.map((event) => {
+            const imageUrl = (event?.imageFileId && getPreviewImageById(event.imageFileId)) ;
                 return (
                   <Link key={event.$id} href={`/event/${event.$id}`}>
                     <a>
-                      <EventCard
+                    <EventCard
                         date={event.date}
-                        // image={{
-                        //   alt: '',
-                        //   height: event.imageHeight,
-                        //   url: event.imageUrl,
-                        //   width: event.imageWidth
-                        // }}
+                        image={ {
+                          alt: '',
+                          height: event.imageHeight,
+                          url: imageUrl,
+                          width: event.imageWidth
+                        }}
                         location={event.location}
                         name={event.name}
                       />

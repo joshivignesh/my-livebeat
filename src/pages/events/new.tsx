@@ -9,11 +9,11 @@ import InputDate from '@/components/InputDate';
 import InputFile from '@/components/InputFile';
 import Button from '@/components/Button';
 import { createEvent } from '@/lib/events';
-
+import { uploadFile } from '@/lib/storage';
 
 interface LiveBeatImage {
   height: number;
-  file:File;
+  file: File;
   width: number;
 }
 
@@ -21,8 +21,6 @@ function EventNew() {
   const [, navigate] = useLocation();
   const [error] = useState<string>();
   const[image, setImage] = useState<LiveBeatImage>();
-
-  console.log('Image', image);
 
   /**
    * handleOnSubmit
@@ -54,10 +52,19 @@ img.src = URL.createObjectURL(target.files[0]);
       date:{value:string}
     }
 
+let file;
+if(image?.file) {
+file = await uploadFile(image.file); 
+}
+
+
     const results = await createEvent({
       name: target.name.value,
       location: target.location.value,
-      date: new Date(target.date.value).toISOString()
+      date: new Date(target.date.value).toISOString(),
+      imageFileId: file?.$id,
+      imageHeight: image?.height,
+      imageWidth: image?.width
     });
 
     navigate(`/event/${results.events.$id}`);
