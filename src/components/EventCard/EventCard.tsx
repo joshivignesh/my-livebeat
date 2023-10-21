@@ -1,4 +1,14 @@
-import { EventCardProps } from "./EventCardProps";
+interface EventCardProps {
+  date: string;
+  image?: ({
+    alt: string;
+    height?: number;
+    url?: string;
+    width?: number;
+  });
+  location: string;
+  name: string;
+}
 
 const EventCard = ({ date, image, location, name }: EventCardProps) => {
   return (
