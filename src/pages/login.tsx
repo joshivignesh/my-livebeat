@@ -23,7 +23,7 @@ const [sent, setSent] = useState(false);
   }
 
   if(session)
-  { return <Redirect to="/"></Redirect> }
+  { return <Redirect to={`${location.origin}/`}></Redirect> }
 
   return (
     <Layout>
