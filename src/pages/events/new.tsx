@@ -26,6 +26,8 @@ function EventNew() {
    * handleOnSubmit
    */
 
+  
+
 function handleOnChange(event: React.FormEvent<HTMLInputElement>) {
   const target = event.target as HTMLInputElement & {
     files: FileList;
@@ -52,10 +54,10 @@ img.src = URL.createObjectURL(target.files[0]);
       date:{value:string}
     }
 
-let file;
-if(image?.file) {
-file = await uploadFile(image.file); 
-}
+    let file;
+    if(image?.file) {
+    file = await uploadFile(image.file); 
+    }
 
 
     const results = await createEvent({
@@ -67,7 +69,7 @@ file = await uploadFile(image.file);
       imageWidth: image?.width
     });
 
-    navigate(`/event/${results.events.$id}`);
+    navigate(`/event/${results.event.$id }`);
 
   }
 

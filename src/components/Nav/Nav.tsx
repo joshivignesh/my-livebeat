@@ -1,8 +1,13 @@
 import { Link } from 'wouter';
-
 import Container from '@/components/Container';
+import { useAuth } from '@/hooks/use-auth';
 
 const Nav = () => {
+  const {session, logOut}= useAuth();
+  async function handleLogOut() {
+    await logOut();
+  }
+
   return (
     <nav>
       <Container className="py-16">
@@ -12,10 +17,15 @@ const Nav = () => {
           </Link>
         </p>
         <p className="flex justify-center gap-4">
-          {/* <button className="font-medium hover:text-[#535bf2] cursor-pointer">Log Out</button>   */}
-          <Link href="/login">
+          {session && (
+          <button className="font-medium hover:text-[#535bf2] cursor-pointer" onClick={handleLogOut}>Log Out</button>  
+          )}
+          {!session && (
+            <Link href="/login">
             <a className="font-medium text-inherit">Log In</a>
           </Link>
+          )}
+          
         </p>
       </Container>
     </nav>
